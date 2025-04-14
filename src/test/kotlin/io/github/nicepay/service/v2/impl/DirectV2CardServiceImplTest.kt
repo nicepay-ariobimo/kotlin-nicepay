@@ -2,8 +2,8 @@ package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.DirectV2Cancel
+import io.github.nicepay.data.model.DirectV2Card
 import io.github.nicepay.data.model.DirectV2CheckStatus
-import io.github.nicepay.data.model.DirectV2VirtualAccount
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2PayMethodService
 import io.github.nicepay.utils.LoggerPrint
@@ -13,15 +13,15 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
 
-class DirectV2VirtualAccountServiceImplTest {
+class DirectV2CardServiceImplTest {
 
     companion object {
         private val print: LoggerPrint = LoggerPrint()
 
-        private val v2VirtualAccountService : DirectV2PayMethodService<DirectV2VirtualAccount> = DirectV2VirtualAccountServiceImpl()
+        private val v2CardService : DirectV2PayMethodService<DirectV2Card> = DirectV2CardServiceImpl()
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
-        private var config: NICEPay? = NICEPay.Builder()
+        var config: NICEPay? = NICEPay.Builder()
             .isProduction(false)
             .clientSecret(TestingConstants.CLIENT_SECRET)
             .partnerId(TestingConstants.PARTNER_ID)
@@ -30,27 +30,24 @@ class DirectV2VirtualAccountServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
-        private lateinit var registeredData : NICEPayResponseV2
+        lateinit var registeredData : NICEPayResponseV2
 
         private val DEFAULT_AMOUNT = "100"
         private val DEFAULT_REFERENCE_NO = "NICEPAYVA111213"
-        private val DEFAULT_IMID = "IONPAYTEST"
+        private val DEFAULT_IMID = "TESTMPGS05"
         private val DEFAULT_MERCHANT_KEY = "33F49GnCMS1mFYlGXisbUDzVf2ATWCl9k3R++d5hDd3Frmuos/XLx8XhXpe+LDYAbpGKZYSwtlyyLOtS/8aD7A=="
     }
 
     @Test
     @Throws(IOException::class)
-    fun createVirtualAccountV2() {
-        val request: DirectV2VirtualAccount = DirectV2VirtualAccount.Builder()
+    fun requestRegistrationCardV2() {
+        val request: DirectV2Card = DirectV2Card.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_VIRTUAL_ACCOUNT)
+            .payMethod(NICEPayConstants.PAY_METHOD_CARD)
             .currency("IDR")
-            .bankCd("BMRI")
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
-            .vacctValidDt("")
-            .vacctValidTm("")
             .goodsNm("Goods")
             .billingNm("NICEPAY Testing")
             .billingPhone("081363681274")
@@ -60,17 +57,21 @@ class DirectV2VirtualAccountServiceImplTest {
             .billingState("DKI Jakarta")
             .billingPostCd("15119")
             .billingCountry("Indonesia")
-            .merFixAcctId("")
             .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+            .userIP("127.0.0.1")
+            .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+            .userLanguage("en")
+            .instmntType("1")
+            .instmntMon("1")
+            .recurrOpt("")
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .build()
 
-        val response : NICEPayResponseV2 = v2VirtualAccountService.registration(request, config)!!
+        val response : NICEPayResponseV2 = v2CardService.registration(request, config)!!
+
         print.logInfoV2("TXID : " + response.tXid)
-        print.logInfoV2("VA : " + response.vacctNo)
 
         Assertions.assertNotNull(response.tXid)
-        Assertions.assertNotNull(response.vacctNo)
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE, response.resultMsg)
 
@@ -79,7 +80,7 @@ class DirectV2VirtualAccountServiceImplTest {
 
     @Test
     fun checkStatus() {
-        createVirtualAccountV2()
+        requestRegistrationCardV2()
 
         val request: DirectV2CheckStatus = DirectV2CheckStatus.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
@@ -90,7 +91,9 @@ class DirectV2VirtualAccountServiceImplTest {
             .amt(DEFAULT_AMOUNT)
             .build()
 
-        val response : NICEPayResponseV2 = v2VirtualAccountService.checkStatus(request, config)!!
+        val response: NICEPayResponseV2 = v2CardService.checkStatus(request,
+            config
+        )!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
         Assertions.assertNotNull(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE)
@@ -98,7 +101,7 @@ class DirectV2VirtualAccountServiceImplTest {
 
     @Test
     fun cancelVirtualAccount() {
-        createVirtualAccountV2()
+        requestRegistrationCardV2()
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
@@ -111,7 +114,7 @@ class DirectV2VirtualAccountServiceImplTest {
             .cancelType("1")
             .build()
 
-        val response : NICEPayResponseV2 = v2VirtualAccountService.cancel(request, config)!!
+        val response: NICEPayResponseV2 = v2CardService.cancel(request, config)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
         Assertions.assertNotNull(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE)

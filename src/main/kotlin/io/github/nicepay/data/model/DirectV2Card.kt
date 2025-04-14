@@ -2,105 +2,61 @@ package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
 
-class Card(
-    timeStamp: String?,
-    iMid: String?,
-    payMethod: String?,
-    currency: String?,
-    merchantToken: String,
-    referenceNo: String?,
-    dbProcessUrl: String?,
-    instmntType: String?,
-    instmntMon: String?,
-    recurrOpt: String?,
-    userIP: String?,
-    userLanguage: String?,
-    userAgent: String?,
-    amt: String?,
-    cartData: String?,
-    goodsNm: String?,
-    billingNm: String?,
-    billingPhone: String?,
-    billingEmail: String?,
-    billingAddr: String?,
-    billingCity: String?,
-    billingState: String?,
-    billingCountry: String?,
-    billingPostCd: String?,
-    merchantKey: String?,
-    tXid: String?,
-    cardNo: String?,
-    cardExpYymm: String?,
-    cardCvv: String?,
-    cardHolderNm: String?,
-    callBackUrl: String?,
-    recurringToken: String?,
-    preauthToken: String?,
-    description: String?,
-    deliveryNm: String?,
-    deliveryPhone: String?,
-    deliveryEmail: String?,
-    deliveryAddr: String?,
-    deliveryCity: String?,
-    deliveryState: String?,
-    deliveryPostCd: String?,
-    deliveryCountry: String?
-) {
+class DirectV2Card(
+    private val timeStamp: String?,
+    private val iMid: String?,
+    private val payMethod: String?,
+    private val currency: String?,
+    private val merchantToken: String?,
+    private val referenceNo: String?,
 
-    private val timeStamp: String? = null
-    private val iMid: String? = null
-    private val payMethod: String? = null
-    private val currency: String? = null
-    private val merchantToken: String? = null
-    private val referenceNo: String? = null
+    private val dbProcessUrl: String?,
 
-    private val dbProcessUrl: String? = null
+    private val instmntType: String?,
+    private val instmntMon: String?,
+    private val recurrOpt: String?,
 
-    private val instmntType: String? = null
-    private val instmntMon: String? = null
-    private val recurrOpt: String? = null
+    private val userIP: String?,
+    private val userLanguage: String?,
+    private val userAgent: String?,
 
-    private val userIP: String? = null
-    private val userLanguage: String? = null
-    private val userAgent: String? = null
-
-    private val amt: String? = null
-    private val cartData: String? = null
-    private val goodsNm: String? = null
-    private val billingNm: String? = null
-    private val billingPhone: String? = null
-    private val billingEmail: String? = null
-    private val billingAddr: String? = null
-    private val billingCity: String? = null
-    private val billingState: String? = null
-    private val billingCountry: String? = null
-    private val billingPostCd: String? = null
-    private val merchantKey: String? = null
+    private val amt: String?,
+    private val cartData: String?,
+    private val goodsNm: String?,
+    private val billingNm: String?,
+    private val billingPhone: String?,
+    private val billingEmail: String?,
+    private val billingAddr: String?,
+    private val billingCity: String?,
+    private val billingState: String?,
+    private val billingCountry: String?,
+    private val billingPostCd: String?,
 
     // PAYMENT
-    private val tXid: String? = null
+    private val tXid: String?,
 
-    private val cardNo: String? = null
-    private val cardExpYymm: String? = null
-    private val cardCvv: String? = null
-    private val cardHolderNm: String? = null
+    private val cardNo: String?,
+    private val cardExpYymm: String?,
+    private val cardCvv: String?,
+    private val cardHolderNm: String?,
 
-    private val callBackUrl: String? = null
+    private val callBackUrl: String?,
 
     // For Recurring and Pre-auth feature
-    private val recurringToken: String? = null
-    private val preauthToken: String? = null
+    private val recurringToken: String?,
+    private val preauthToken: String?,
 
     // V1
-    private val description: String? = null
-    private val deliveryNm: String? = null
-    private val deliveryPhone: String? = null
-    private val deliveryEmail: String? = null
-    private val deliveryAddr: String? = null
-    private val deliveryCity: String? = null
-    private val deliveryState: String? = null
-    private val deliveryPostCd: String? = null
-    private val deliveryCountry: String? = null
+    private val description: String?,
+    private val deliveryNm: String?,
+    private val deliveryPhone: String?,
+    private val deliveryEmail: String?,
+    private val deliveryAddr: String?,
+    private val deliveryCity: String?,
+    private val deliveryState: String?,
+    private val deliveryPostCd: String?,
+    private val deliveryCountry: String?,
+) {
 
     class Builder {
         private var timeStamp: String? = null
@@ -189,16 +145,51 @@ class Card(
         fun deliveryPostCd(deliveryPostCd: String?) = apply { this.deliveryPostCd = deliveryPostCd }
         fun deliveryCountry(deliveryCountry: String?) = apply { this.deliveryCountry = deliveryCountry }
 
-        fun build() : Card {
+        fun build(): DirectV2Card {
 
-            return Card(
-                timeStamp, iMid, payMethod, currency,
-                SHA256Util.encrypt(this.timeStamp + this.iMid + this.referenceNo + this.amt + this.merchantKey).toString(),
-                referenceNo, dbProcessUrl, instmntType, instmntMon, recurrOpt,
-                userIP, userLanguage, userAgent, amt, cartData, goodsNm, billingNm, billingPhone, billingEmail, billingAddr,
-                billingCity, billingState, billingCountry, billingPostCd, merchantKey, tXid, cardNo, cardExpYymm, cardCvv,
-                cardHolderNm, callBackUrl, recurringToken, preauthToken, description, deliveryNm, deliveryPhone, deliveryEmail,
-                deliveryAddr, deliveryCity, deliveryState, deliveryPostCd, deliveryCountry
+            return DirectV2Card(
+                timeStamp,
+                iMid,
+                payMethod,
+                currency,
+                SHA256Util.encrypt(this.timeStamp + this.iMid + this.referenceNo + this.amt + this.merchantKey)
+                    .toString(),
+                referenceNo,
+                dbProcessUrl,
+                instmntType,
+                instmntMon,
+                recurrOpt,
+                userIP,
+                userLanguage,
+                userAgent,
+                amt,
+                cartData,
+                goodsNm,
+                billingNm,
+                billingPhone,
+                billingEmail,
+                billingAddr,
+                billingCity,
+                billingState,
+                billingCountry,
+                billingPostCd,
+                tXid,
+                cardNo,
+                cardExpYymm,
+                cardCvv,
+                cardHolderNm,
+                callBackUrl,
+                recurringToken,
+                preauthToken,
+                description,
+                deliveryNm,
+                deliveryPhone,
+                deliveryEmail,
+                deliveryAddr,
+                deliveryCity,
+                deliveryState,
+                deliveryPostCd,
+                deliveryCountry
             )
         }
     }

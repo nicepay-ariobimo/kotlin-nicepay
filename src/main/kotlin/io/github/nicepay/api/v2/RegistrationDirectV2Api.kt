@@ -5,7 +5,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface VirtualAccountRequestDirectV2Api : DirectV2Api {
+interface RegistrationDirectV2Api : DirectV2Api {
 
     @POST("nicepay/direct/v2/registration")
     override fun hitDirectV2Api(@Body request: Any?): Call<NICEPayResponseV2?>?

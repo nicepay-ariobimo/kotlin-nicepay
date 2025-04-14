@@ -2,7 +2,7 @@ package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
 
-class DirectV2InquiryStatus(
+class DirectV2CheckStatus(
     private val timeStamp: String?,
     private val tXid: String?,
     private val iMid: String?,
@@ -27,8 +27,8 @@ class DirectV2InquiryStatus(
         fun amt(amt: String) = apply { this.amt = amt }
         fun merchantKey(merchantKey: String) = apply { this.merchantKey = merchantKey }
 
-        fun build(): DirectV2InquiryStatus {
-            return DirectV2InquiryStatus(
+        fun build(): DirectV2CheckStatus {
+            return DirectV2CheckStatus(
                 timeStamp,
                 tXid,
                 iMid,
