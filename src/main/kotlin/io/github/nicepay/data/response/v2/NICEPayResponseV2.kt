@@ -15,12 +15,18 @@ class NICEPayResponseV2 : BaseNICEPayResponseV2() {
     val currency: String? = null
     val goodsNm: String? = null
     val billingNm: String? = null
+    val mitraCd: String? = null
 
     //va
     val bankCd: String? = null
     val vacctNo: String? = null
     val vacctValidDt: String? = null
     val vacctValidTm: String? = null
+
+    //CVS
+    val payNo: String? = null
+    val payValidDt: String? = null
+    val payValidTm: String? = null
 
     //inquiry
     val reqDt: String? = null
@@ -42,7 +48,6 @@ class NICEPayResponseV2 : BaseNICEPayResponseV2() {
     val issuBankNm: String? = null
     val acquBankCd: String? = null
     val acquirerData: JsonObject? = null
-    val latestFailHistory: JsonArray? = null
     val authNo: String? = null
     val recurringToken: String? = null
     val acquStatus: String? = null

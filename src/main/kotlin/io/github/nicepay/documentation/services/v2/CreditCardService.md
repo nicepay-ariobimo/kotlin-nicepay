@@ -329,7 +329,6 @@ Sample Response
   "acquirerData": {
     "rrn": "424806091032"
   },
-  "latestFailHistory": [],
   "resultCd": "0000",
   "resultMsg": "void"
 }

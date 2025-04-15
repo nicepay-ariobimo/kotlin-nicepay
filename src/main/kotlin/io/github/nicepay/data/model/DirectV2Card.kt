@@ -45,17 +45,6 @@ class DirectV2Card(
     // For Recurring and Pre-auth feature
     private val recurringToken: String?,
     private val preauthToken: String?,
-
-    // V1
-    private val description: String?,
-    private val deliveryNm: String?,
-    private val deliveryPhone: String?,
-    private val deliveryEmail: String?,
-    private val deliveryAddr: String?,
-    private val deliveryCity: String?,
-    private val deliveryState: String?,
-    private val deliveryPostCd: String?,
-    private val deliveryCountry: String?,
 ) {
 
     class Builder {
@@ -92,15 +81,6 @@ class DirectV2Card(
         private var callBackUrl: String? = null
         private var recurringToken: String? = null
         private var preauthToken: String? = null
-        private var description: String? = null
-        private var deliveryNm: String? = null
-        private var deliveryPhone: String? = null
-        private var deliveryEmail: String? = null
-        private var deliveryAddr: String? = null
-        private var deliveryCity: String? = null
-        private var deliveryState: String? = null
-        private var deliveryPostCd: String? = null
-        private var deliveryCountry: String? = null
 
         // Builder methods
         fun timeStamp(timeStamp: String?) = apply { this.timeStamp = timeStamp }
@@ -135,15 +115,6 @@ class DirectV2Card(
         fun callBackUrl(callBackUrl: String?) = apply { this.callBackUrl = callBackUrl }
         fun recurringToken(recurringToken: String?) = apply { this.recurringToken = recurringToken }
         fun preauthToken(preauthToken: String?) = apply { this.preauthToken = preauthToken }
-        fun description(description: String?) = apply { this.description = description }
-        fun deliveryNm(deliveryNm: String?) = apply { this.deliveryNm = deliveryNm }
-        fun deliveryPhone(deliveryPhone: String?) = apply { this.deliveryPhone = deliveryPhone }
-        fun deliveryEmail(deliveryEmail: String?) = apply { this.deliveryEmail = deliveryEmail }
-        fun deliveryAddr(deliveryAddr: String?) = apply { this.deliveryAddr = deliveryAddr }
-        fun deliveryCity(deliveryCity: String?) = apply { this.deliveryCity = deliveryCity }
-        fun deliveryState(deliveryState: String?) = apply { this.deliveryState = deliveryState }
-        fun deliveryPostCd(deliveryPostCd: String?) = apply { this.deliveryPostCd = deliveryPostCd }
-        fun deliveryCountry(deliveryCountry: String?) = apply { this.deliveryCountry = deliveryCountry }
 
         fun build(): DirectV2Card {
 
@@ -180,16 +151,7 @@ class DirectV2Card(
                 cardHolderNm,
                 callBackUrl,
                 recurringToken,
-                preauthToken,
-                description,
-                deliveryNm,
-                deliveryPhone,
-                deliveryEmail,
-                deliveryAddr,
-                deliveryCity,
-                deliveryState,
-                deliveryPostCd,
-                deliveryCountry
+                preauthToken
             )
         }
     }

@@ -61,6 +61,5 @@ class TestingConstants {
         val NORMALTEST_CLOUD_PRIVATE_KEY: String = ""
 
         val DEFAULT_NICEPAY_SUCCESS_RESULT_CODE = "0000"
-        val DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE = "SUCCESS"
     }
 }

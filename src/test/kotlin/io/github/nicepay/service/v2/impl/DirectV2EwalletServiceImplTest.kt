@@ -2,8 +2,8 @@ package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.DirectV2Cancel
-import io.github.nicepay.data.model.DirectV2Card
 import io.github.nicepay.data.model.DirectV2CheckStatus
+import io.github.nicepay.data.model.DirectV2Ewallet
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2PayMethodService
 import io.github.nicepay.utils.LoggerPrint
@@ -13,15 +13,15 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
 
-class DirectV2CardServiceImplTest {
+class DirectV2EwalletServiceImplTest {
 
     companion object {
         private val print: LoggerPrint = LoggerPrint()
 
-        private val v2CardService : DirectV2PayMethodService<DirectV2Card> = DirectV2CardServiceImpl()
+        private val v2EwalletService : DirectV2PayMethodService<DirectV2Ewallet> = DirectV2EwalletServiceImpl()
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
-        var config: NICEPay? = NICEPay.Builder()
+        private var config: NICEPay? = NICEPay.Builder()
             .isProduction(false)
             .clientSecret(TestingConstants.CLIENT_SECRET)
             .partnerId(TestingConstants.PARTNER_ID)
@@ -30,24 +30,27 @@ class DirectV2CardServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
-        lateinit var registeredData : NICEPayResponseV2
+        private lateinit var registeredData : NICEPayResponseV2
 
         private val DEFAULT_AMOUNT = "100"
         private val DEFAULT_REFERENCE_NO = "NICEPAYVA111213"
-        private val DEFAULT_IMID = "TESTMPGS05"
+        private val DEFAULT_IMID = "IONPAYTEST"
         private val DEFAULT_MERCHANT_KEY = "33F49GnCMS1mFYlGXisbUDzVf2ATWCl9k3R++d5hDd3Frmuos/XLx8XhXpe+LDYAbpGKZYSwtlyyLOtS/8aD7A=="
     }
 
     @Test
     @Throws(IOException::class)
-    fun requestRegistrationCardV2() {
-        val request: DirectV2Card = DirectV2Card.Builder()
+    fun requestRegistrationEwalletV2() {
+        val request : DirectV2Ewallet = DirectV2Ewallet.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_CARD)
+            .payMethod(NICEPayConstants.PAY_METHOD_EWALLET)
             .currency("IDR")
+            .mitraCd(NICEPayConstants.Code.Ewallet.DANA)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
+            .payValidDt("")
+            .payValidTm("")
             .goodsNm("Goods")
             .billingNm("NICEPAY Testing")
             .billingPhone("081363681274")
@@ -58,16 +61,11 @@ class DirectV2CardServiceImplTest {
             .billingPostCd("15119")
             .billingCountry("Indonesia")
             .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
-            .userIP("127.0.0.1")
-            .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
-            .userLanguage("en")
-            .instmntType("1")
-            .instmntMon("1")
-            .recurrOpt("")
+            .cartData("{\"count\":\"1\",\"item\":[{\"img_url\":\"https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium\",\"goods_name\":\"Nokia 3360\",\"goods_detail\":\"Old Nokia 3360\",\"goods_amt\":\"" + DEFAULT_AMOUNT + "\",\"goods_quantity\":\"1\"}]}")
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .build()
 
-        val response : NICEPayResponseV2 = v2CardService.registration(request, config)!!
+        val response : NICEPayResponseV2 = v2EwalletService.registration(request, config)!!
 
         print.logInfoV2("TXID : " + response.tXid)
 
@@ -79,7 +77,7 @@ class DirectV2CardServiceImplTest {
 
     @Test
     fun checkStatus() {
-        requestRegistrationCardV2()
+        requestRegistrationEwalletV2()
 
         val request: DirectV2CheckStatus = DirectV2CheckStatus.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
@@ -90,16 +88,14 @@ class DirectV2CardServiceImplTest {
             .amt(DEFAULT_AMOUNT)
             .build()
 
-        val response: NICEPayResponseV2 = v2CardService.checkStatus(request,
-            config
-        )!!
+        val response : NICEPayResponseV2 = v2EwalletService.checkStatus(request, config)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }
 
     @Test
     fun cancel() {
-        requestRegistrationCardV2()
+        requestRegistrationEwalletV2()
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
@@ -108,11 +104,11 @@ class DirectV2CardServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod("02")
+            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
             .cancelType("1")
             .build()
 
-        val response: NICEPayResponseV2 = v2CardService.cancel(request, config)!!
+        val response : NICEPayResponseV2 = v2EwalletService.cancel(request, config)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }

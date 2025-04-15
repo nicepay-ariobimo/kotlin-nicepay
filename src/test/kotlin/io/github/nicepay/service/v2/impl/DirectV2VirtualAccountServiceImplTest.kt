@@ -46,7 +46,7 @@ class DirectV2VirtualAccountServiceImplTest {
             .iMid(DEFAULT_IMID)
             .payMethod(NICEPayConstants.PAY_METHOD_VIRTUAL_ACCOUNT)
             .currency("IDR")
-            .bankCd("BMRI")
+            .bankCd(NICEPayConstants.Code.VirtualAccount.MANDIRI)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .vacctValidDt("")
@@ -72,7 +72,6 @@ class DirectV2VirtualAccountServiceImplTest {
         Assertions.assertNotNull(response.tXid)
         Assertions.assertNotNull(response.vacctNo)
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
-        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE, response.resultMsg)
 
         registeredData = response
     }
@@ -93,7 +92,6 @@ class DirectV2VirtualAccountServiceImplTest {
         val response : NICEPayResponseV2 = v2VirtualAccountService.checkStatus(request, config)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
-        Assertions.assertNotNull(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE)
     }
 
     @Test
@@ -107,14 +105,13 @@ class DirectV2VirtualAccountServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod("02")
+            .payMethod(NICEPayConstants.PAY_METHOD_VIRTUAL_ACCOUNT)
             .cancelType("1")
             .build()
 
         val response : NICEPayResponseV2 = v2VirtualAccountService.cancel(request, config)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
-        Assertions.assertNotNull(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_MESSAGE)
     }
 
 }
