@@ -71,6 +71,22 @@ class NICEPayConstants {
                 val AKULAKU = "AKLP"
             }
         }
+
+        class Qris {
+            companion object {
+                val NOBU = "NOBU"
+                val SHOPEEPAY = "QSHP"
+                val NICEPAY = "NICE"
+            }
+        }
+
+        class Payout {
+            companion object {
+                val PERMATA = "BBBA"
+                val MANDIRI = "BMRI"
+                val DANAMON = "BDIN"
+            }
+        }
     }
 
 }
