@@ -1,11 +1,9 @@
 package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.data.TestingConstants
-import io.github.nicepay.data.model.DirectV2Cancel
-import io.github.nicepay.data.model.DirectV2CheckStatus
-import io.github.nicepay.data.model.DirectV2Cvs
+import io.github.nicepay.data.model.RedirectV2
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
-import io.github.nicepay.service.v2.DirectV2Service
+import io.github.nicepay.service.v2.RedirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
@@ -13,12 +11,12 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
 
-class DirectV2CvsServiceImplTest {
+class RedirectV2ServiceImplTest {
 
     companion object {
         private val print: LoggerPrint = LoggerPrint()
 
-        private val v2CvsService : DirectV2Service<DirectV2Cvs> = DirectV2CvsServiceImpl()
+        private val v2RedirectService : RedirectV2Service = RedirectV2ServiceImpl()
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
         private var config: NICEPay? = NICEPay.Builder()
@@ -40,17 +38,14 @@ class DirectV2CvsServiceImplTest {
 
     @Test
     @Throws(IOException::class)
-    fun requestRegistrationCvsV2() {
-        val request : DirectV2Cvs = DirectV2Cvs.Builder()
+    fun registerRedirect() {
+        val request : RedirectV2 = RedirectV2.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
+            .payMethod(NICEPayConstants.PAY_METHOD_ALL)
             .currency("IDR")
-            .mitraCd(NICEPayConstants.Code.CVS.INDOMART)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
-            .payValidDt("")
-            .payValidTm("")
             .goodsNm("Goods")
             .billingNm("NICEPAY Testing")
             .billingPhone("081363681274")
@@ -60,58 +55,17 @@ class DirectV2CvsServiceImplTest {
             .billingState("DKI Jakarta")
             .billingPostCd("15119")
             .billingCountry("Indonesia")
-            .merFixAcctId("")
             .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+            .callBakUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
             .merchantKey(DEFAULT_MERCHANT_KEY)
+            .cartData("{\"count\":\"1\",\"item\":[{\"goods_id\":\"BB12345678\",\"img_url\":\"https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium\",\"goods_name\":\"Nokia 3360\",\"goods_detail\":\"Old Nokia 3360\",\"goods_amt\":\"" + DEFAULT_AMOUNT + "\",\"goods_type\":\"Smartphone\",\"goods_url\":\"http://merchant.com/cellphones/iphone5s_64g\",\"goods_quantity\":\"1\",\"goods_sellers_id\":\"SEL123\",\"goods_sellers_name\":\"Sellers1\"}]}")
+            .userIP("127.0.0.1")
             .build()
 
-        val response : NICEPayResponseV2 = v2CvsService.registration(request, config)!!
-
+        val response : NICEPayResponseV2 = v2RedirectService.registration(request, config)!!
         print.logInfoV2("TXID : " + response.tXid)
-        print.logInfoV2("VA : " + response.vacctNo)
 
         Assertions.assertNotNull(response.tXid)
-        Assertions.assertNotNull(response.payNo)
-        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
-
-        registeredData = response
-    }
-
-    @Test
-    fun checkStatus() {
-        requestRegistrationCvsV2()
-
-        val request: DirectV2CheckStatus = DirectV2CheckStatus.Builder()
-            .timeStamp(TestingConstants.V2_TIMESTAMP)
-            .tXid(registeredData.tXid!!)
-            .iMid(DEFAULT_IMID)
-            .merchantKey(DEFAULT_MERCHANT_KEY)
-            .referenceNo(DEFAULT_REFERENCE_NO)
-            .amt(DEFAULT_AMOUNT)
-            .build()
-
-        val response : NICEPayResponseV2 = v2CvsService.checkStatus(request, config)!!
-
-        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
-    }
-
-    @Test
-    fun cancel() {
-        requestRegistrationCvsV2()
-
-        val request : DirectV2Cancel = DirectV2Cancel.Builder()
-            .timeStamp(TestingConstants.V2_TIMESTAMP)
-            .tXid(registeredData.tXid!!)
-            .iMid(DEFAULT_IMID)
-            .merchantKey(DEFAULT_MERCHANT_KEY)
-            .referenceNo(DEFAULT_REFERENCE_NO)
-            .amt(DEFAULT_AMOUNT)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
-            .cancelType("1")
-            .build()
-
-        val response : NICEPayResponseV2 = v2CvsService.cancel(request, config)!!
-
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }
 

@@ -6,7 +6,7 @@ import io.github.nicepay.data.model.DirectV2InquiryPayout
 import io.github.nicepay.data.model.DirectV2Payout
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2PayoutService
-import io.github.nicepay.service.v2.DirectV2Service
+import io.github.nicepay.service.v2.ApiHttpService
 import io.github.nicepay.utils.ApiUtils
 import io.github.nicepay.utils.NICEPay
 
@@ -14,9 +14,9 @@ class DirectV2PayoutServiceImpl : DirectV2PayoutService {
 
     override fun requestPayout(data: DirectV2Payout, config: NICEPay?): NICEPayResponseV2? {
         var nicePayResponse: NICEPayResponseV2? = null
-        val directV2Service : DirectV2Service<DirectV2Payout, RequestPayoutDirectV2Api> = DirectV2ServiceImpl()
+        val apiHttpService : ApiHttpService<DirectV2Payout, RequestPayoutDirectV2Api> = ApiHttpServiceImpl()
         try {
-            nicePayResponse = directV2Service.generate(data, ApiUtils.createServiceV2(RequestPayoutDirectV2Api::class.java, config!!), config)
+            nicePayResponse = apiHttpService.generate(data, ApiUtils.createServiceV2(RequestPayoutDirectV2Api::class.java, config!!), config)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -25,9 +25,9 @@ class DirectV2PayoutServiceImpl : DirectV2PayoutService {
 
     override fun inquiryPayout(data: DirectV2InquiryPayout, config: NICEPay?): NICEPayResponseV2? {
         var nicePayResponse: NICEPayResponseV2? = null
-        val directV2Service : DirectV2Service<DirectV2InquiryPayout, InquiryPayoutDirectV2Api> = DirectV2ServiceImpl()
+        val apiHttpService : ApiHttpService<DirectV2InquiryPayout, InquiryPayoutDirectV2Api> = ApiHttpServiceImpl()
         try {
-            nicePayResponse = directV2Service.generate(data, ApiUtils.createServiceV2(InquiryPayoutDirectV2Api::class.java, config!!), config)
+            nicePayResponse = apiHttpService.generate(data, ApiUtils.createServiceV2(InquiryPayoutDirectV2Api::class.java, config!!), config)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -36,9 +36,9 @@ class DirectV2PayoutServiceImpl : DirectV2PayoutService {
 
     override fun cancel(data: DirectV2CancelPayout, config: NICEPay?): NICEPayResponseV2? {
         var nicePayResponse: NICEPayResponseV2? = null
-        val directV2Service : DirectV2Service<DirectV2CancelPayout, CancelPayoutDirectV2Api> = DirectV2ServiceImpl()
+        val apiHttpService : ApiHttpService<DirectV2CancelPayout, CancelPayoutDirectV2Api> = ApiHttpServiceImpl()
         try {
-            nicePayResponse = directV2Service.generate(data, ApiUtils.createServiceV2(CancelPayoutDirectV2Api::class.java, config!!), config)
+            nicePayResponse = apiHttpService.generate(data, ApiUtils.createServiceV2(CancelPayoutDirectV2Api::class.java, config!!), config)
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

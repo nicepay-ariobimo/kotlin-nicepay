@@ -52,4 +52,7 @@ class NICEPayResponseV2 : BaseNICEPayResponseV2() {
     val recurringToken: String? = null
     val acquStatus: String? = null
 
+    // Redirect
+    val paymentURL: String? = null
+
 }

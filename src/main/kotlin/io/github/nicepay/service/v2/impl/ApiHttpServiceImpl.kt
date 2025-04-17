@@ -6,14 +6,14 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import io.github.nicepay.api.v2.DirectV2Api
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
-import io.github.nicepay.service.v2.DirectV2Service
+import io.github.nicepay.service.v2.ApiHttpService
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 
-class DirectV2ServiceImpl<T, U : DirectV2Api> : DirectV2Service<T, U> {
+class ApiHttpServiceImpl<T, U : DirectV2Api> : ApiHttpService<T, U> {
 
     private val print: LoggerPrint = LoggerPrint()
 
@@ -40,7 +40,6 @@ class DirectV2ServiceImpl<T, U : DirectV2Api> : DirectV2Service<T, U> {
             } else {
                 gson.toJson(nicePayResponse)
             }
-
 
             jsonObject = JsonParser.parseString(resClient.toString()).getAsJsonObject()
             print.logInfoResponseV2("Response Hit API :" + GsonBuilder().setPrettyPrinting().create().toJson(jsonObject))

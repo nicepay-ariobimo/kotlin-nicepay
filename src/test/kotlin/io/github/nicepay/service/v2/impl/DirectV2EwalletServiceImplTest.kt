@@ -5,7 +5,7 @@ import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2CheckStatus
 import io.github.nicepay.data.model.DirectV2Ewallet
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
-import io.github.nicepay.service.v2.DirectV2PayMethodService
+import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
@@ -18,7 +18,7 @@ class DirectV2EwalletServiceImplTest {
     companion object {
         private val print: LoggerPrint = LoggerPrint()
 
-        private val v2EwalletService : DirectV2PayMethodService<DirectV2Ewallet> = DirectV2EwalletServiceImpl()
+        private val v2EwalletService : DirectV2Service<DirectV2Ewallet> = DirectV2EwalletServiceImpl()
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
         private var config: NICEPay? = NICEPay.Builder()

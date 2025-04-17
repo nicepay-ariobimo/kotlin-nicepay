@@ -9,6 +9,7 @@ class NICEPayConstants {
         private val AWS_SANDBOX_BASE_URL: String = "https://dev-services.nicepay.co.id"
         private val AWS_PRODUCTION_BASE_URL: String = "https://services.nicepay.co.id"
 
+        val PAY_METHOD_ALL = "00"
         val PAY_METHOD_CARD = "01"
         val PAY_METHOD_VIRTUAL_ACCOUNT = "02"
         val PAY_METHOD_CONVINIENCE_STORE = "03"
