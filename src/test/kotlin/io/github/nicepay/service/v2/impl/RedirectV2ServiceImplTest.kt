@@ -67,6 +67,7 @@ class RedirectV2ServiceImplTest {
 
         Assertions.assertNotNull(response.tXid)
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+        Assertions.assertNotNull(response.paymentURL)
     }
 
 }

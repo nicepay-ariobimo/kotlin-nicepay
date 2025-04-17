@@ -70,6 +70,8 @@ class DirectV2QrisServiceImplTest {
         print.logInfoV2("TXID : " + response.tXid)
 
         Assertions.assertNotNull(response.tXid)
+        Assertions.assertNotNull(response.qrContent)
+        Assertions.assertNotNull(response.qrUrl)
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
 
         registeredData = response

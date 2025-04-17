@@ -28,6 +28,10 @@ class NICEPayResponseV2 : BaseNICEPayResponseV2() {
     val payValidDt: String? = null
     val payValidTm: String? = null
 
+    //QRIS
+    val qrContent: String? = null
+    val qrUrl: String? = null
+
     //inquiry
     val reqDt: String? = null
     val reqTm: String? = null
