@@ -4,7 +4,6 @@ import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.*
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2PayoutService
-import io.github.nicepay.service.v2.impl.DirectV2PayoutServiceImplTest.Companion.timeStamp
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants

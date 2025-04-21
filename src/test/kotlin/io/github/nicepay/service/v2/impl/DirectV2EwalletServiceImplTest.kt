@@ -4,11 +4,15 @@ import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2CheckStatus
 import io.github.nicepay.data.model.DirectV2Ewallet
+import io.github.nicepay.data.model.DirectV2RequestPaymentToMitra
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
+import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.WebViewServiceUtils
+import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -19,6 +23,9 @@ class DirectV2EwalletServiceImplTest {
         private val print: LoggerPrint = LoggerPrint()
 
         private val v2EwalletService : DirectV2Service<DirectV2Ewallet> = DirectV2EwalletServiceImpl()
+
+        private val paymentService : DirectV2PaymentService<DirectV2RequestPaymentToMitra> = DirectV2PaymentToMitraServiceImpl()
+
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
         private var config: NICEPay? = NICEPay.Builder()
@@ -94,8 +101,31 @@ class DirectV2EwalletServiceImplTest {
     }
 
     @Test
-    fun cancel() {
+    fun payment() {
         requestRegistrationEwalletV2()
+
+        val request : DirectV2RequestPaymentToMitra = DirectV2RequestPaymentToMitra.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .build()
+
+        val response : String = paymentService.registration(request, config)!!
+
+        Assertions.assertNotNull(response)
+        Assertions.assertNotEquals(Strings.EMPTY, response)
+
+        WebViewServiceUtils.openHtmlEwalletInBrowser(response, registeredData.tXid.toString())
+    }
+
+    @Test
+    fun cancel() {
+        payment()
+
+        Thread.sleep(30000)
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
