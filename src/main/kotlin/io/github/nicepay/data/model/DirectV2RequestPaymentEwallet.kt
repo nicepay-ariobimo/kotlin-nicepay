@@ -2,7 +2,7 @@ package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
 
-open class DirectV2RequestPaymentToMitra(
+open class DirectV2RequestPaymentEwallet(
     val timeStamp: String?,
     val tXid: String?,
     val callBackUrl: String?,
@@ -38,8 +38,8 @@ open class DirectV2RequestPaymentToMitra(
         fun callBakUrl(callBakUrl: String?) = apply { this.callBakUrl = callBakUrl }
         fun merchantKey(merchantKey: String?) = apply { this.merchantKey = merchantKey }
 
-        fun build(): DirectV2RequestPaymentToMitra {
-            return DirectV2RequestPaymentToMitra(
+        fun build(): DirectV2RequestPaymentEwallet {
+            return DirectV2RequestPaymentEwallet(
                 timeStamp, tXid, callBakUrl,
                 SHA256Util.encrypt(this.timeStamp + this.iMid + this.referenceNo + this.amt + this.merchantKey).toString()
             )

@@ -1,5 +1,8 @@
 package io.github.nicepay.data
 
+import java.awt.Desktop
+import java.io.File
+import java.io.FileWriter
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,5 +64,22 @@ class TestingConstants {
         val NORMALTEST_CLOUD_PRIVATE_KEY: String = ""
 
         val DEFAULT_NICEPAY_SUCCESS_RESULT_CODE = "0000"
+
+        fun openHtmlEwalletV2InBrowser(resClient: String, tXid: String) {
+            val script = "<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js'></script> \n"
+            openHtmlInBrowser(script + resClient, tXid)
+        }
+
+        fun openHtmlInBrowser(resClient: String, tXid: String) {
+            //Save the HTML content to a temporary file
+
+            val tempFile = File.createTempFile("Payment-$tXid-", ".html")
+            val writer = FileWriter(tempFile)
+            writer.write(resClient)
+            writer.close()
+
+            // Open page on browser
+            Desktop.getDesktop().browse(tempFile.toURI())
+        }
     }
 }

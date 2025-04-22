@@ -10,7 +10,7 @@ class DirectV2RequestPaymentCard(
     private val cardExpYymm: String?,
     private val cardCvv: String?,
     merchantToken: String?
-) : DirectV2RequestPaymentToMitra(
+) : DirectV2RequestPaymentEwallet(
     timeStamp, tXid, callBackUrl, merchantToken
 ) {
 
@@ -55,7 +55,7 @@ class DirectV2RequestPaymentCard(
         fun build(): DirectV2RequestPaymentCard {
             return DirectV2RequestPaymentCard(
                 timeStamp, tXid, callBakUrl, cardNo, cardExpYymm, cardCvv,
-                SHA256Util.encrypt(this.timeStamp + this.tXid + this.referenceNo + this.amt + this.merchantKey).toString()
+                SHA256Util.encrypt(this.timeStamp + this.iMid + this.referenceNo + this.amt + this.merchantKey).toString()
             )
         }
 

@@ -1,7 +1,7 @@
 package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.api.v2.DirectV2ApiPayment
-import io.github.nicepay.data.model.DirectV2RequestPaymentToMitra
+import io.github.nicepay.data.model.DirectV2RequestPaymentEwallet
 import io.github.nicepay.service.v2.ApiHttpPaymentService
 import io.github.nicepay.utils.ApiUtils
 import io.github.nicepay.utils.LoggerPrint
@@ -11,7 +11,7 @@ import org.apache.logging.log4j.util.Strings
 import retrofit2.Call
 import retrofit2.Response
 
-class ApiHttpPaymentServiceImpl<T : DirectV2RequestPaymentToMitra> : ApiHttpPaymentService<T> {
+class ApiHttpPaymentServiceImpl<T : DirectV2RequestPaymentEwallet> : ApiHttpPaymentService<T> {
 
     private val print: LoggerPrint = LoggerPrint()
 

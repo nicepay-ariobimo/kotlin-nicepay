@@ -4,11 +4,14 @@ import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2Card
 import io.github.nicepay.data.model.DirectV2CheckStatus
+import io.github.nicepay.data.model.DirectV2RequestPaymentCard
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
+import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
+import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -19,6 +22,9 @@ class DirectV2CardServiceImplTest {
         private val print: LoggerPrint = LoggerPrint()
 
         private val v2CardService : DirectV2Service<DirectV2Card> = DirectV2CardServiceImpl()
+
+        private val paymentService : DirectV2PaymentService<DirectV2RequestPaymentCard> = DirectV2PaymentCardServiceImpl()
+
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
         var config: NICEPay? = NICEPay.Builder()
@@ -95,6 +101,31 @@ class DirectV2CardServiceImplTest {
         )!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun payment() {
+        requestRegistrationCardV2()
+
+        val request : DirectV2RequestPaymentCard = DirectV2RequestPaymentCard.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .callBakUrl((config?.getNICEPayBaseUrl()) + "/IONPAY_CLIENT/paymentResult.jsp")
+            .cardNo("5123450000000008")
+            .cardCvv("123")
+            .cardExpYymm("2512")
+            .build()
+
+        val response = paymentService.registration(request, config)!!
+
+        Assertions.assertNotNull(response)
+        Assertions.assertNotEquals(Strings.EMPTY, response)
+
+        TestingConstants.openHtmlInBrowser(response, registeredData.tXid.toString())
     }
 
     @Test
