@@ -52,7 +52,6 @@ class DirectV2Card(
         private var iMid: String? = null
         private var payMethod: String? = null
         private var currency: String? = null
-        private var merchantToken: String? = null
         private var referenceNo: String? = null
         private var dbProcessUrl: String? = null
         private var instmntType: String? = null
