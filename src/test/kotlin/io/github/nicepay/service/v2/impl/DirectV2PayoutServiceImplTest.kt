@@ -7,6 +7,7 @@ import io.github.nicepay.service.v2.DirectV2PayoutService
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.PayoutAction
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -67,8 +68,24 @@ class DirectV2PayoutServiceImplTest {
     }
 
     @Test
-    fun inquiryPayout() {
+    fun approvePayout() {
         requestPayoutV2()
+
+        val request: DirectV2ApproveOrRejectPayout = DirectV2ApproveOrRejectPayout.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .build()
+
+        val response : NICEPayResponseV2 = v2PayoutService.approveOrRejectPayout(request, config, PayoutAction.APPROVE)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun inquiryPayout() {
+        approvePayout()
 
         val request: DirectV2InquiryPayout = DirectV2InquiryPayout.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
@@ -85,7 +102,7 @@ class DirectV2PayoutServiceImplTest {
 
     @Test
     fun cancel() {
-        requestPayoutV2()
+        approvePayout()
 
         val request : DirectV2CancelPayout = DirectV2CancelPayout.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)

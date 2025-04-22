@@ -125,7 +125,7 @@ class DirectV2EwalletServiceImplTest {
     fun cancel() {
         payment()
 
-        Thread.sleep(30000)
+        Thread.sleep(20000)
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)

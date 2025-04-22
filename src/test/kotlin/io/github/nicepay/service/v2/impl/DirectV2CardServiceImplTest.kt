@@ -130,7 +130,9 @@ class DirectV2CardServiceImplTest {
 
     @Test
     fun cancel() {
-        requestRegistrationCardV2()
+        payment()
+
+        Thread.sleep(20000)
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)

@@ -4,11 +4,14 @@ import io.github.nicepay.data.TestingConstants
 import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2CheckStatus
 import io.github.nicepay.data.model.DirectV2Payloan
+import io.github.nicepay.data.model.DirectV2RequestPaymentEwallet
 import io.github.nicepay.data.response.v2.NICEPayResponseV2
+import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
 import io.github.nicepay.utils.NICEPayConstants
+import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -19,6 +22,9 @@ class DirectV2PayloanServiceImplTest {
         private val print: LoggerPrint = LoggerPrint()
 
         private val v2PayloanService : DirectV2Service<DirectV2Payloan> = DirectV2PayloanServiceImpl()
+
+        private val paymentService : DirectV2PaymentService<DirectV2RequestPaymentEwallet> = DirectV2PaymentEwalletServiceImpl()
+
         private val timeStamp: String = TestingConstants.V2_TIMESTAMP
 
         private var config: NICEPay? = NICEPay.Builder()
@@ -46,7 +52,7 @@ class DirectV2PayloanServiceImplTest {
             .iMid(DEFAULT_IMID)
             .payMethod(NICEPayConstants.PAY_METHOD_PAYLOAN)
             .currency("IDR")
-            .mitraCd(NICEPayConstants.Code.Payloan.KREDIVO)
+            .mitraCd(NICEPayConstants.Code.Payloan.AKULAKU)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .payValidDt("")
@@ -105,8 +111,28 @@ class DirectV2PayloanServiceImplTest {
     }
 
     @Test
-    fun cancel() {
+    fun payment() {
         requestRegistrationPayloanV2()
+
+        val request : DirectV2RequestPaymentEwallet = DirectV2RequestPaymentEwallet.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .callBakUrl((config?.getNICEPayBaseUrl()) + "/IONPAY_CLIENT/paymentResult.jsp")
+            .amt(DEFAULT_AMOUNT)
+            .build()
+
+        val response : String = paymentService.registration(request, config)!!
+
+        Assertions.assertNotNull(response)
+        Assertions.assertNotEquals(Strings.EMPTY, response)
+    }
+
+    @Test
+    fun cancel() {
+        payment()
 
         val request : DirectV2Cancel = DirectV2Cancel.Builder()
             .timeStamp(TestingConstants.V2_TIMESTAMP)
