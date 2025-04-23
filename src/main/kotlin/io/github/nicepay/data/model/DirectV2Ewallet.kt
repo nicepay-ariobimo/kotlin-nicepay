@@ -1,5 +1,7 @@
 package io.github.nicepay.data.model
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.nicepay.data.cart.CartData
 import io.github.nicepay.utils.SHA256Util
 import io.github.nicepay.utils.code.EwalletMitra
 import io.github.nicepay.utils.code.NICEPayMethod
@@ -73,6 +75,12 @@ class DirectV2Ewallet(
         fun payValidTm(payValidTm: String?) = apply { this.payValidTm = payValidTm }
         fun dbProcessUrl(dbProcessUrl: String?) = apply { this.dbProcessUrl = dbProcessUrl }
         fun cartData(cartData: String?) = apply { this.cartData = cartData }
+        fun cartData(cartData: CartData?) = apply {
+            val mapper = ObjectMapper()
+            this.cartData = mapper.writeValueAsString(
+                cartData
+            )
+        }
         fun merchantKey(merchantKey: String?) = apply { this.merchantKey = merchantKey }
 
         fun build(): DirectV2Ewallet {

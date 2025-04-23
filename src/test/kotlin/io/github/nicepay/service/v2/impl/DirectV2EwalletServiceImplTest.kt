@@ -1,6 +1,8 @@
 package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.data.TestingConstants
+import io.github.nicepay.data.cart.CartData
+import io.github.nicepay.data.cart.CartItem
 import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2CheckStatus
 import io.github.nicepay.data.model.DirectV2Ewallet
@@ -68,7 +70,27 @@ class DirectV2EwalletServiceImplTest {
             .billingPostCd("15119")
             .billingCountry("Indonesia")
             .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
-            .cartData("{\"count\":\"1\",\"item\":[{\"img_url\":\"https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium\",\"goods_name\":\"Nokia 3360\",\"goods_detail\":\"Old Nokia 3360\",\"goods_amt\":\"" + DEFAULT_AMOUNT + "\",\"goods_quantity\":\"1\"}]}")
+            .cartData(
+                CartData.Builder()
+                    .count("1")
+                    .item(
+                        listOf(
+                            CartItem.Builder()
+                                .goodsId("BB12345678")
+                                .imgUrl("https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium")
+                                .goodsName("Nokia 3360")
+                                .goodsDetail("Old Nokia 3360")
+                                .goodsAmt(DEFAULT_AMOUNT)
+                                .goodsType("Smartphone")
+                                .goodsUrl("http://merchant.com/cellphones/iphone5s_64g")
+                                .goodsQuantity("1")
+                                .goodsSellersId("goods_sellers_id")
+                                .goodsSellersName("Sellers1")
+                                .build()
+                        )
+                    )
+                    .build()
+            )
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .build()
 

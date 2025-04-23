@@ -1,5 +1,7 @@
 package io.github.nicepay.data.model
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.nicepay.data.cart.CartData
 import io.github.nicepay.utils.SHA256Util
 import io.github.nicepay.utils.code.NICEPayMethod
 
@@ -69,6 +71,12 @@ class RedirectV2(
         fun dbProcessUrl(dbProcessUrl: String?) = apply { this.dbProcessUrl = dbProcessUrl }
         fun callBakUrl(callBakUrl: String?) = apply { this.callBakUrl = callBakUrl }
         fun cartData(cartData: String?) = apply { this.cartData = cartData }
+        fun cartData(cartData: CartData?) = apply {
+            val mapper = ObjectMapper()
+            this.cartData = mapper.writeValueAsString(
+                cartData
+            )
+        }
         fun userIP(userIP: String?) = apply { this.userIP = userIP }
         fun merchantKey(merchantKey: String?) = apply { this.merchantKey = merchantKey }
 

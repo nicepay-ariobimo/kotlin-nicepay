@@ -1,5 +1,8 @@
 package io.github.nicepay.data.model
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.nicepay.data.cart.CartData
+import io.github.nicepay.data.cart.SellersData
 import io.github.nicepay.utils.SHA256Util
 import io.github.nicepay.utils.code.NICEPayMethod
 import io.github.nicepay.utils.code.PayloanMitra
@@ -95,7 +98,19 @@ class DirectV2Payloan(
         fun payValidTm(payValidTm: String?) = apply { this.payValidTm = payValidTm }
         fun dbProcessUrl(dbProcessUrl: String?) = apply { this.dbProcessUrl = dbProcessUrl }
         fun cartData(cartData: String?) = apply { this.cartData = cartData }
+        fun cartData(cartData: CartData?) = apply {
+            val mapper = ObjectMapper()
+            this.cartData = mapper.writeValueAsString(
+                cartData
+            )
+        }
         fun sellers(sellers: String?) = apply { this.sellers = sellers }
+        fun sellers(sellers: List<SellersData>?) = apply {
+            val mapper = ObjectMapper()
+            this.sellers = mapper.writeValueAsString(
+                sellers
+            )
+        }
         fun merchantKey(merchantKey: String?) = apply { this.merchantKey = merchantKey }
         fun deliveryNm(deliveryNm: String?) = apply { this.deliveryNm = deliveryNm }
         fun deliveryPhone(deliveryPhone: String?) = apply { this.deliveryPhone = deliveryPhone }

@@ -1,6 +1,10 @@
 package io.github.nicepay.service.v2.impl
 
 import io.github.nicepay.data.TestingConstants
+import io.github.nicepay.data.cart.CartData
+import io.github.nicepay.data.cart.CartItem
+import io.github.nicepay.data.cart.SellersAddress
+import io.github.nicepay.data.cart.SellersData
 import io.github.nicepay.data.model.DirectV2Cancel
 import io.github.nicepay.data.model.DirectV2CheckStatus
 import io.github.nicepay.data.model.DirectV2Payloan
@@ -43,6 +47,9 @@ class DirectV2PayloanServiceImplTest {
         private val DEFAULT_REFERENCE_NO = "NICEPAYVA111213"
         private val DEFAULT_IMID = "IONPAYTEST"
         private val DEFAULT_MERCHANT_KEY = "33F49GnCMS1mFYlGXisbUDzVf2ATWCl9k3R++d5hDd3Frmuos/XLx8XhXpe+LDYAbpGKZYSwtlyyLOtS/8aD7A=="
+
+        private val SELLER_ID_SHOULD_BE_EQUAL = "SEL123"
+        private val SELLER_NAME_SHOULD_BE_EQUAL = "Sellers1"
     }
 
     @Test
@@ -68,9 +75,49 @@ class DirectV2PayloanServiceImplTest {
             .billingPostCd("15119")
             .billingCountry("Indonesia")
             .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
-            .cartData("{\"count\":\"1\",\"item\":[{\"goods_id\":\"BB12345678\",\"img_url\":\"https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium\",\"goods_name\":\"Nokia 3360\",\"goods_detail\":\"Old Nokia 3360\",\"goods_amt\":\"" + DEFAULT_AMOUNT + "\",\"goods_type\":\"Smartphone\",\"goods_url\":\"http://merchant.com/cellphones/iphone5s_64g\",\"goods_quantity\":\"1\",\"goods_sellers_id\":\"SEL123\",\"goods_sellers_name\":\"Sellers1\"}]}")
+            .cartData(
+                CartData.Builder()
+                    .count("1")
+                    .item(
+                        listOf(
+                            CartItem.Builder()
+                                .goodsId("BB12345678")
+                                .imgUrl("https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium")
+                                .goodsName("Nokia 3360")
+                                .goodsDetail("Old Nokia 3360")
+                                .goodsAmt(DEFAULT_AMOUNT)
+                                .goodsType("Smartphone")
+                                .goodsUrl("http://merchant.com/cellphones/iphone5s_64g")
+                                .goodsQuantity("1")
+                                .goodsSellersId(SELLER_ID_SHOULD_BE_EQUAL)
+                                .goodsSellersName(SELLER_NAME_SHOULD_BE_EQUAL)
+                                .build()
+                        )
+                    )
+                    .build()
+            )
+            .sellers(
+                listOf(
+                    SellersData.Builder()
+                        .sellersId(SELLER_ID_SHOULD_BE_EQUAL)
+                        .sellersNm(SELLER_NAME_SHOULD_BE_EQUAL)
+                        .sellersEmail("sellers@test.com")
+                        .sellersUrl("http://nicestore.store")
+                        .sellersAddress(
+                            SellersAddress.Builder()
+                                .sellerNm("Sellers")
+                                .sellerLastNm("1")
+                                .sellerAddr("Jl. Kota Kasablanka")
+                                .sellerCity("Jakarta Selatan")
+                                .sellerPostCd("12344")
+                                .sellerPhone("081234567890")
+                                .sellerCountry("ID")
+                                .build()
+                        )
+                        .build()
+                )
+            )
             .merchantKey(DEFAULT_MERCHANT_KEY)
-            .sellers("[{\"sellersId\":\"SEL123\",\"sellersNm\":\"Sellers1\",\"sellersEmail\":\"sellers@test.com\",\"sellersUrl\":\"http://nicestore.store\",\"sellersAddress\":{\"sellerNm\":\"Sellers\",\"sellerLastNm\":\"1\",\"sellerAddr\":\"jalanberbangsa1\",\"sellerCity\":\"JakartaBarat\",\"sellerPostCd\":\"12344\",\"sellerPhone\":\"08123456789\",\"sellerCountry\":\"ID\"}}]")
             .deliveryNm("Nicepay Test Delivery Name")
             .deliveryPhone("081234567890")
             .deliveryAddr("EightyEight@Kota Kasablanka, 29th Floor")
