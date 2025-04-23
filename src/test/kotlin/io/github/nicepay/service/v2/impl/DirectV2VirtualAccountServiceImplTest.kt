@@ -8,7 +8,8 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.NICEPayMethod
+import io.github.nicepay.utils.code.VirtualAccountBank
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -44,9 +45,9 @@ class DirectV2VirtualAccountServiceImplTest {
         val request: DirectV2VirtualAccount = DirectV2VirtualAccount.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_VIRTUAL_ACCOUNT)
+            .payMethod(NICEPayMethod.PAY_METHOD_VIRTUAL_ACCOUNT)
             .currency("IDR")
-            .bankCd(NICEPayConstants.Code.VirtualAccount.MANDIRI)
+            .bankCd(VirtualAccountBank.MANDIRI)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .vacctValidDt("")
@@ -105,7 +106,7 @@ class DirectV2VirtualAccountServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod(NICEPayConstants.PAY_METHOD_VIRTUAL_ACCOUNT)
+            .payMethod(NICEPayMethod.PAY_METHOD_VIRTUAL_ACCOUNT)
             .cancelType("1")
             .build()
 

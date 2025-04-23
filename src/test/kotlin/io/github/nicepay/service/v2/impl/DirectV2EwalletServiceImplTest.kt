@@ -10,7 +10,8 @@ import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.EwalletMitra
+import io.github.nicepay.utils.code.NICEPayMethod
 import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -50,9 +51,9 @@ class DirectV2EwalletServiceImplTest {
         val request : DirectV2Ewallet = DirectV2Ewallet.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_EWALLET)
+            .payMethod(NICEPayMethod.PAY_METHOD_EWALLET)
             .currency("IDR")
-            .mitraCd(NICEPayConstants.Code.Ewallet.DANA)
+            .mitraCd(EwalletMitra.DANA)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .payValidDt("")
@@ -134,7 +135,7 @@ class DirectV2EwalletServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
+            .payMethod(NICEPayMethod.PAY_METHOD_EWALLET)
             .cancelType("1")
             .build()
 

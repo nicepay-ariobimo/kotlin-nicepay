@@ -10,7 +10,7 @@ import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.NICEPayMethod
 import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -50,7 +50,7 @@ class DirectV2CardServiceImplTest {
         val request: DirectV2Card = DirectV2Card.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_CARD)
+            .payMethod(NICEPayMethod.PAY_METHOD_CARD)
             .currency("IDR")
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)

@@ -1,6 +1,7 @@
 package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
+import io.github.nicepay.utils.code.NICEPayMethod
 
 class DirectV2Card(
     private val timeStamp: String?,
@@ -85,6 +86,7 @@ class DirectV2Card(
         fun timeStamp(timeStamp: String?) = apply { this.timeStamp = timeStamp }
         fun iMid(iMid: String?) = apply { this.iMid = iMid }
         fun payMethod(payMethod: String?) = apply { this.payMethod = payMethod }
+        fun payMethod(payMethod: NICEPayMethod?) = apply { this.payMethod = payMethod?.code }
         fun currency(currency: String?) = apply { this.currency = currency }
         fun referenceNo(referenceNo: String?) = apply { this.referenceNo = referenceNo }
         fun dbProcessUrl(dbProcessUrl: String?) = apply { this.dbProcessUrl = dbProcessUrl }

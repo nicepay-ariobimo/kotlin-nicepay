@@ -1,6 +1,8 @@
 package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
+import io.github.nicepay.utils.code.ConvinienceStoreMitra
+import io.github.nicepay.utils.code.NICEPayMethod
 
 class DirectV2Cvs(
     private val timeStamp: String?,
@@ -52,6 +54,7 @@ class DirectV2Cvs(
         fun timeStamp(timeStamp: String?) = apply { this.timeStamp = timeStamp }
         fun iMid(iMid: String?) = apply { this.iMid = iMid }
         fun payMethod(payMethod: String?) = apply { this.payMethod = payMethod }
+        fun payMethod(payMethod: NICEPayMethod?) = apply { this.payMethod = payMethod?.code }
         fun currency(currency: String?) = apply { this.currency = currency }
         fun amt(amt: String?) = apply { this.amt = amt }
         fun referenceNo(referenceNo: String?) = apply { this.referenceNo = referenceNo }
@@ -65,6 +68,7 @@ class DirectV2Cvs(
         fun billingPostCd(billingPostCd: String?) = apply { this.billingPostCd = billingPostCd }
         fun billingCountry(billingCountry: String?) = apply { this.billingCountry = billingCountry }
         fun mitraCd(mitraCd: String?) = apply { this.mitraCd = mitraCd }
+        fun mitraCd(mitraCd: ConvinienceStoreMitra?) = apply { this.mitraCd = mitraCd?.code }
         fun payValidDt(payValidDt: String?) = apply { this.payValidDt = payValidDt }
         fun payValidTm(payValidTm: String?) = apply { this.payValidTm = payValidTm }
         fun merFixAcctId(merFixAcctId: String?) = apply { this.merFixAcctId = merFixAcctId }

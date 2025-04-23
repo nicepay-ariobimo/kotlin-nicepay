@@ -6,8 +6,8 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2PayoutService
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
 import io.github.nicepay.utils.code.PayoutAction
+import io.github.nicepay.utils.code.PayoutBank
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -45,7 +45,7 @@ class DirectV2PayoutServiceImplTest {
         request = DirectV2Payout.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .bankCd(NICEPayConstants.Code.Payout.MANDIRI)
+            .bankCd(PayoutBank.MANDIRI)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .merchantKey(DEFAULT_MERCHANT_KEY)

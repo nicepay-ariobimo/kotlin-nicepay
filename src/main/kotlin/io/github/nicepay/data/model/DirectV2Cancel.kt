@@ -1,6 +1,7 @@
 package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
+import io.github.nicepay.utils.code.NICEPayMethod
 
 class DirectV2Cancel(
     private val timeStamp: String?,
@@ -44,6 +45,7 @@ class DirectV2Cancel(
         fun tXid(tXid: String) = apply { this.tXid = tXid }
         fun iMid(iMid: String) = apply { this.iMid = iMid }
         fun payMethod(payMethod: String) = apply { this.payMethod = payMethod }
+        fun payMethod(payMethod: NICEPayMethod?) = apply { this.payMethod = payMethod?.code }
         fun cancelType(cancelType: String) = apply { this.cancelType = cancelType }
         fun amt(amt: String) = apply { this.amt = amt }
         fun merchantKey(merchantKey: String) = apply { this.merchantKey = merchantKey }

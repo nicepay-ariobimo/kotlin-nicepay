@@ -10,7 +10,8 @@ import io.github.nicepay.service.v2.DirectV2PaymentService
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.NICEPayMethod
+import io.github.nicepay.utils.code.PayloanMitra
 import org.apache.logging.log4j.util.Strings
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
@@ -50,9 +51,9 @@ class DirectV2PayloanServiceImplTest {
         val request : DirectV2Payloan = DirectV2Payloan.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_PAYLOAN)
+            .payMethod(NICEPayMethod.PAY_METHOD_PAYLOAN)
             .currency("IDR")
-            .mitraCd(NICEPayConstants.Code.Payloan.AKULAKU)
+            .mitraCd(PayloanMitra.AKULAKU)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .payValidDt("")
@@ -141,7 +142,7 @@ class DirectV2PayloanServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
+            .payMethod(NICEPayMethod.PAY_METHOD_PAYLOAN)
             .cancelType("1")
             .build()
 

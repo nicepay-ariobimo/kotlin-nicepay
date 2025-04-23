@@ -1,6 +1,7 @@
 package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
+import io.github.nicepay.utils.code.PayoutBank
 
 class DirectV2Payout(
     private val timeStamp: String?,
@@ -36,6 +37,7 @@ class DirectV2Payout(
         fun amt(amt: String?) = apply { this.amt = amt }
         fun referenceNo(referenceNo: String?) = apply { this.referenceNo = referenceNo }
         fun bankCd(bankCd: String?) = apply { this.bankCd = bankCd }
+        fun bankCd(bankCd: PayoutBank?) = apply { this.bankCd = bankCd?.code }
         fun accountNo(accountNo: String?) = apply { this.accountNo = accountNo }
         fun benefNm(benefNm: String?) = apply { this.benefNm = benefNm }
         fun benefStatus(benefStatus: String?) = apply { this.benefStatus = benefStatus }

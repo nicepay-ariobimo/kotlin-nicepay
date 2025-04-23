@@ -1,6 +1,8 @@
 package io.github.nicepay.data.model
 
 import io.github.nicepay.utils.SHA256Util
+import io.github.nicepay.utils.code.NICEPayMethod
+import io.github.nicepay.utils.code.VirtualAccountBank
 
 class DirectV2VirtualAccount(
     private val timeStamp: String?,
@@ -52,6 +54,7 @@ class DirectV2VirtualAccount(
         fun timeStamp(timeStamp: String?) = apply { this.timeStamp = timeStamp }
         fun iMid(iMid: String?) = apply { this.iMid = iMid }
         fun payMethod(payMethod: String?) = apply { this.payMethod = payMethod }
+        fun payMethod(payMethod: NICEPayMethod?) = apply { this.payMethod = payMethod?.code }
         fun currency(currency: String?) = apply { this.currency = currency }
         fun amt(amt: String?) = apply { this.amt = amt }
         fun referenceNo(referenceNo: String?) = apply { this.referenceNo = referenceNo }
@@ -65,6 +68,7 @@ class DirectV2VirtualAccount(
         fun billingPostCd(billingPostCd: String?) = apply { this.billingPostCd = billingPostCd }
         fun billingCountry(billingCountry: String?) = apply { this.billingCountry = billingCountry }
         fun bankCd(bankCd: String?) = apply { this.bankCd = bankCd }
+        fun bankCd(bankCd: VirtualAccountBank?) = apply { this.bankCd = bankCd?.code }
         fun vacctValidDt(vacctValidDt: String?) = apply { this.vacctValidDt = vacctValidDt }
         fun vacctValidTm(vacctValidTm: String?) = apply { this.vacctValidTm = vacctValidTm }
         fun merFixAcctId(merFixAcctId: String?) = apply { this.merFixAcctId = merFixAcctId }

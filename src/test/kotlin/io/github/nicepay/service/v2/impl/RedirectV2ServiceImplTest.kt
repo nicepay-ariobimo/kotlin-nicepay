@@ -6,7 +6,7 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.RedirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.NICEPayMethod
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -42,7 +42,7 @@ class RedirectV2ServiceImplTest {
         val request : RedirectV2 = RedirectV2.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_ALL)
+            .payMethod(NICEPayMethod.PAY_METHOD_ALL)
             .currency("IDR")
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)

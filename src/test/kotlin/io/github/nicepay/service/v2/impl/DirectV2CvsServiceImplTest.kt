@@ -8,7 +8,8 @@ import io.github.nicepay.data.response.v2.NICEPayResponseV2
 import io.github.nicepay.service.v2.DirectV2Service
 import io.github.nicepay.utils.LoggerPrint
 import io.github.nicepay.utils.NICEPay
-import io.github.nicepay.utils.NICEPayConstants
+import io.github.nicepay.utils.code.ConvinienceStoreMitra
+import io.github.nicepay.utils.code.NICEPayMethod
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.io.IOException
@@ -44,9 +45,9 @@ class DirectV2CvsServiceImplTest {
         val request : DirectV2Cvs = DirectV2Cvs.Builder()
             .timeStamp(timeStamp)
             .iMid(DEFAULT_IMID)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
+            .payMethod(NICEPayMethod.PAY_METHOD_CONVINIENCE_STORE)
             .currency("IDR")
-            .mitraCd(NICEPayConstants.Code.CVS.INDOMART)
+            .mitraCd(ConvinienceStoreMitra.INDOMART)
             .amt(DEFAULT_AMOUNT)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .payValidDt("")
@@ -106,7 +107,7 @@ class DirectV2CvsServiceImplTest {
             .merchantKey(DEFAULT_MERCHANT_KEY)
             .referenceNo(DEFAULT_REFERENCE_NO)
             .amt(DEFAULT_AMOUNT)
-            .payMethod(NICEPayConstants.PAY_METHOD_CONVINIENCE_STORE)
+            .payMethod(NICEPayMethod.PAY_METHOD_CONVINIENCE_STORE)
             .cancelType("1")
             .build()
 
