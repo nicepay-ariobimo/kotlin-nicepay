@@ -31,6 +31,16 @@ class DirectV2CvsServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
+        private val configCloud: NICEPay = NICEPay.Builder()
+            .isProduction(false)
+            .isCloudServer(true)
+            .clientSecret(TestingConstants.CLIENT_SECRET)
+            .partnerId(TestingConstants.PARTNER_ID)
+            .externalID(TestingConstants.EXTERNAL_ID)
+            .timestamp(TestingConstants.TIMESTAMP)
+            .privateKey(TestingConstants.PRIVATE_KEY)
+            .build()
+
         private lateinit var registeredData : NICEPayResponseV2
 
         private val DEFAULT_AMOUNT = "100"
@@ -112,6 +122,83 @@ class DirectV2CvsServiceImplTest {
             .build()
 
         val response : NICEPayResponseV2 = v2CvsService.cancel(request, config)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun requestRegistrationCvsV2Cloud() {
+        val request : DirectV2Cvs = DirectV2Cvs.Builder()
+            .timeStamp(timeStamp)
+            .iMid(DEFAULT_IMID)
+            .payMethod(NICEPayMethod.PAY_METHOD_CONVINIENCE_STORE)
+            .currency("IDR")
+            .mitraCd(ConvinienceStoreMitra.INDOMART)
+            .amt(DEFAULT_AMOUNT)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .payValidDt("")
+            .payValidTm("")
+            .goodsNm("Goods")
+            .billingNm("NICEPAY Testing")
+            .billingPhone("081363681274")
+            .billingEmail("nicepay@example.com")
+            .billingAddr("Jln. Raya Kasablanka Kav.88")
+            .billingCity("South Jakarta")
+            .billingState("DKI Jakarta")
+            .billingPostCd("15119")
+            .billingCountry("Indonesia")
+            .merFixAcctId("")
+            .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .build()
+
+        val response : NICEPayResponseV2 = v2CvsService.registration(request, configCloud)!!
+
+        print.logInfoV2("TXID : " + response.tXid)
+        print.logInfoV2("VA : " + response.vacctNo)
+
+        Assertions.assertNotNull(response.tXid)
+        Assertions.assertNotNull(response.payNo)
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+
+        registeredData = response
+    }
+
+    @Test
+    fun checkStatusCloud() {
+        requestRegistrationCvsV2()
+
+        val request: DirectV2CheckStatus = DirectV2CheckStatus.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .build()
+
+        val response : NICEPayResponseV2 = v2CvsService.checkStatus(request, configCloud)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun cancelCloud() {
+        requestRegistrationCvsV2()
+
+        val request : DirectV2Cancel = DirectV2Cancel.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .payMethod(NICEPayMethod.PAY_METHOD_CONVINIENCE_STORE)
+            .cancelType("1")
+            .build()
+
+        val response : NICEPayResponseV2 = v2CvsService.cancel(request, configCloud)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }

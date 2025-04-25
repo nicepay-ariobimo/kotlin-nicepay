@@ -30,6 +30,16 @@ class RedirectV2ServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
+        private val configCloud: NICEPay = NICEPay.Builder()
+            .isProduction(false)
+            .isCloudServer(true)
+            .clientSecret(TestingConstants.CLIENT_SECRET)
+            .partnerId(TestingConstants.PARTNER_ID)
+            .externalID(TestingConstants.EXTERNAL_ID)
+            .timestamp(TestingConstants.TIMESTAMP)
+            .privateKey(TestingConstants.PRIVATE_KEY)
+            .build()
+
         private lateinit var registeredData : NICEPayResponseV2
 
         private val DEFAULT_AMOUNT = "100"
@@ -85,6 +95,60 @@ class RedirectV2ServiceImplTest {
             .build()
 
         val response : NICEPayResponseV2 = v2RedirectService.registration(request, config)!!
+        print.logInfoV2("TXID : " + response.tXid)
+
+        Assertions.assertNotNull(response.tXid)
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+        Assertions.assertNotNull(response.paymentURL)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun registerRedirectCloud() {
+        val request : RedirectV2 = RedirectV2.Builder()
+            .timeStamp(timeStamp)
+            .iMid(DEFAULT_IMID)
+            .payMethod(NICEPayMethod.PAY_METHOD_ALL)
+            .currency("IDR")
+            .amt(DEFAULT_AMOUNT)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .goodsNm("Goods")
+            .billingNm("NICEPAY Testing")
+            .billingPhone("081363681274")
+            .billingEmail("nicepay@example.com")
+            .billingAddr("Jln. Raya Kasablanka Kav.88")
+            .billingCity("South Jakarta")
+            .billingState("DKI Jakarta")
+            .billingPostCd("15119")
+            .billingCountry("Indonesia")
+            .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+            .callBakUrl("https://dev.nicepay.co.id/IONPAY_CLIENT/paymentResult.jsp")
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .cartData(
+                CartData.Builder()
+                    .count("1")
+                    .item(
+                        listOf(
+                            CartItem.Builder()
+                                .goodsId("BB12345678")
+                                .imgUrl("https://d3nevzfk7ii3be.cloudfront.net/igi/vOrGHXlovukA566A.medium")
+                                .goodsName("Nokia 3360")
+                                .goodsDetail("Old Nokia 3360")
+                                .goodsAmt(DEFAULT_AMOUNT)
+                                .goodsType("Smartphone")
+                                .goodsUrl("http://merchant.com/cellphones/iphone5s_64g")
+                                .goodsQuantity("1")
+                                .goodsSellersId("goods_sellers_id")
+                                .goodsSellersName("Sellers1")
+                                .build()
+                        )
+                    )
+                    .build()
+            )
+            .userIP("127.0.0.1")
+            .build()
+
+        val response : NICEPayResponseV2 = v2RedirectService.registration(request, configCloud)!!
         print.logInfoV2("TXID : " + response.tXid)
 
         Assertions.assertNotNull(response.tXid)

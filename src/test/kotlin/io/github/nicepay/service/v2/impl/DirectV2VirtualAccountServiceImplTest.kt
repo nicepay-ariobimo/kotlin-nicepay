@@ -31,6 +31,16 @@ class DirectV2VirtualAccountServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
+        private val configCloud: NICEPay = NICEPay.Builder()
+            .isProduction(false)
+            .isCloudServer(true)
+            .clientSecret(TestingConstants.CLIENT_SECRET)
+            .partnerId(TestingConstants.PARTNER_ID)
+            .externalID(TestingConstants.EXTERNAL_ID)
+            .timestamp(TestingConstants.TIMESTAMP)
+            .privateKey(TestingConstants.PRIVATE_KEY)
+            .build()
+
         private lateinit var registeredData : NICEPayResponseV2
 
         private val DEFAULT_AMOUNT = "100"
@@ -111,6 +121,82 @@ class DirectV2VirtualAccountServiceImplTest {
             .build()
 
         val response : NICEPayResponseV2 = v2VirtualAccountService.cancel(request, config)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun createVirtualAccountV2Cloud() {
+        val request: DirectV2VirtualAccount = DirectV2VirtualAccount.Builder()
+            .timeStamp(timeStamp)
+            .iMid(DEFAULT_IMID)
+            .payMethod(NICEPayMethod.PAY_METHOD_VIRTUAL_ACCOUNT)
+            .currency("IDR")
+            .bankCd(VirtualAccountBank.MANDIRI)
+            .amt(DEFAULT_AMOUNT)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .vacctValidDt("")
+            .vacctValidTm("")
+            .goodsNm("Goods")
+            .billingNm("NICEPAY Testing")
+            .billingPhone("081363681274")
+            .billingEmail("nicepay@example.com")
+            .billingAddr("Jln. Raya Kasablanka Kav.88")
+            .billingCity("South Jakarta")
+            .billingState("DKI Jakarta")
+            .billingPostCd("15119")
+            .billingCountry("Indonesia")
+            .merFixAcctId("")
+            .dbProcessUrl("https://webhook.site/912cbdd8-eb28-4e98-be6a-181b806b8110")
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .build()
+
+        val response : NICEPayResponseV2 = v2VirtualAccountService.registration(request, configCloud)!!
+        print.logInfoV2("TXID : " + response.tXid)
+        print.logInfoV2("VA : " + response.vacctNo)
+
+        Assertions.assertNotNull(response.tXid)
+        Assertions.assertNotNull(response.vacctNo)
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+
+        registeredData = response
+    }
+
+    @Test
+    fun checkStatusCloud() {
+        createVirtualAccountV2()
+
+        val request: DirectV2CheckStatus = DirectV2CheckStatus.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .build()
+
+        val response : NICEPayResponseV2 = v2VirtualAccountService.checkStatus(request, configCloud)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun cancelVirtualAccountCloud() {
+        createVirtualAccountV2()
+
+        val request : DirectV2Cancel = DirectV2Cancel.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .amt(DEFAULT_AMOUNT)
+            .payMethod(NICEPayMethod.PAY_METHOD_VIRTUAL_ACCOUNT)
+            .cancelType("1")
+            .build()
+
+        val response : NICEPayResponseV2 = v2VirtualAccountService.cancel(request, configCloud)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }

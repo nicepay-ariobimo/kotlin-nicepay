@@ -1,46 +1,14 @@
 package io.github.nicepay.utils
 
 class NICEPay(
-    partnerId: String?,
-    clientSecret: String?,
-    isProduction: Boolean,
-    isCloudServer: Boolean,
-    externalID: String?,
-    timestamp: String?,
-    privateKey: String?
+    val partnerId: String?,
+    val clientSecret: String?,
+    val isProduction: Boolean,
+    val isCloudServer: Boolean,
+    val externalID: String?,
+    val timestamp: String?,
+    val privateKey: String?
 ) {
-
-    var partnerId: String? = null
-
-    var clientSecret: String? = null
-
-    var isProduction = false
-
-    var isCloudServer = false
-
-    var externalID: String? = null
-
-    var timestamp: String? = null
-
-    var privateKey: String? = null
-
-    fun NICEPay(
-        partnerId: String?,
-        clientSecret: String?,
-        isProduction: Boolean,
-        isCloudServer: Boolean,
-        externalID: String?,
-        timestamp: String?,
-        privateKey: String?
-    ) {
-        this.partnerId = partnerId
-        this.clientSecret = clientSecret
-        this.isProduction = isProduction
-        this.isCloudServer = isCloudServer
-        this.externalID = externalID
-        this.timestamp = timestamp
-        this.privateKey = privateKey
-    }
 
     fun getNICEPayBaseUrl(): String {
         return if (isProduction) {

@@ -29,6 +29,16 @@ class DirectV2PayoutServiceImplTest {
             .privateKey(TestingConstants.PRIVATE_KEY)
             .build()
 
+        private val configCloud: NICEPay = NICEPay.Builder()
+            .isProduction(false)
+            .isCloudServer(true)
+            .clientSecret(TestingConstants.CLIENT_SECRET)
+            .partnerId(TestingConstants.PARTNER_ID)
+            .externalID(TestingConstants.EXTERNAL_ID)
+            .timestamp(TestingConstants.TIMESTAMP)
+            .privateKey(TestingConstants.PRIVATE_KEY)
+            .build()
+
         private var request: DirectV2Payout? = null
 
         private lateinit var registeredData : NICEPayResponseV2
@@ -112,6 +122,83 @@ class DirectV2PayoutServiceImplTest {
             .build()
 
         val response : NICEPayResponseV2 = v2PayoutService.cancel(request, config)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    @Throws(IOException::class)
+    fun requestPayoutV2Cloud() {
+        request = DirectV2Payout.Builder()
+            .timeStamp(timeStamp)
+            .iMid(DEFAULT_IMID)
+            .bankCd(PayoutBank.MANDIRI)
+            .amt(DEFAULT_AMOUNT)
+            .referenceNo(DEFAULT_REFERENCE_NO)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .accountNo("1150000231250")
+            .benefNm("Test")
+            .benefType("1")
+            .benefStatus("1")
+            .benefPhone("081234567890")
+            .payoutMethod("0")
+            .build()
+
+        val response : NICEPayResponseV2 = v2PayoutService.requestPayout(request!!, configCloud)!!
+
+        print.logInfoV2("TXID : " + response.tXid)
+
+        Assertions.assertNotNull(response.tXid)
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+
+        registeredData = response
+    }
+
+    @Test
+    fun approvePayoutCloud() {
+        requestPayoutV2()
+
+        val request: DirectV2ApproveOrRejectPayout = DirectV2ApproveOrRejectPayout.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .build()
+
+        val response : NICEPayResponseV2 = v2PayoutService.approveOrRejectPayout(request, configCloud, PayoutAction.APPROVE)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun inquiryPayoutCloud() {
+        approvePayout()
+
+        val request: DirectV2InquiryPayout = DirectV2InquiryPayout.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .accountNo(request!!.accountNo.toString())
+            .build()
+
+        val response : NICEPayResponseV2 = v2PayoutService.inquiryPayout(request, configCloud)!!
+
+        Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
+    }
+
+    @Test
+    fun cancelCloud() {
+        approvePayout()
+
+        val request : DirectV2CancelPayout = DirectV2CancelPayout.Builder()
+            .timeStamp(TestingConstants.V2_TIMESTAMP)
+            .tXid(registeredData.tXid!!)
+            .iMid(DEFAULT_IMID)
+            .merchantKey(DEFAULT_MERCHANT_KEY)
+            .build()
+
+        val response : NICEPayResponseV2 = v2PayoutService.cancel(request, configCloud)!!
 
         Assertions.assertEquals(TestingConstants.DEFAULT_NICEPAY_SUCCESS_RESULT_CODE, response.resultCd)
     }
